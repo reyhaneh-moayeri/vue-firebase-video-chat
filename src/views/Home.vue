@@ -3,9 +3,7 @@
     <p v-if="user" class="mt-3">
       welcome <span class="text-blue-600">{{ user }}</span>
     </p>
-    <h1 class="mt-8 text-5xl px-6 font-extrabold text-red-500 tracking-tight">
-      Start a video chat
-    </h1>
+    <h1>Start a video chat</h1>
     <img class="w-32 mt-3 mx-auto" src="http://pixelprowess.com/i/powship.svg" alt="POW Ship" />
   </div>
 </template>

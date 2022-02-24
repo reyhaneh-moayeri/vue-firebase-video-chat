@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Nav @signout="signOut" :user="user" />
-    <router-view :user="user" @signout="signOut" @addRoom="addRoom" />
+    <router-view :user="user" @signout="signOut" :rooms="rooms" @addRoom="addRoom" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import Nav from './components/Nav.vue'
 import db from './db.js'
 import Firebase from 'firebase/firestore'
-import { collection, doc, addDoc } from 'firebase/firestore'
+import { collection, doc, addDoc, getDocs } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: 'Home',
@@ -18,7 +18,8 @@ export default {
   },
   data() {
     return {
-      user: null
+      user: null,
+      rooms: []
     }
   },
 
@@ -47,15 +48,49 @@ export default {
         })
     },
     async addRoom(payload) {
-      const t = doc(collection(db, 'users'), this.user.uid)
-      await addDoc(collection(t, 'rooms'), {
+      const userDoc = doc(collection(db, 'users'), this.user.uid)
+      await addDoc(collection(userDoc, 'rooms'), {
         name: payload,
         createdAt: new Date().toDateString()
       })
+    },
+
+    getRoomsData() {
+      const auth = getAuth()
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          const userRef = doc(collection(db, 'users'), this.user.uid)
+          const querySnapshot = getDocs(collection(userRef, 'rooms'))
+          querySnapshot.then(res => {
+            const snapData = []
+            res.forEach(doc => {
+              snapData.push({
+                id: doc.id,
+                name: doc.data().name,
+                createdAt: doc.data().createdAt
+              })
+            })
+
+            this.rooms = snapData.sort((a, b) => {
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                return -1
+              } else {
+                return 1
+              }
+            })
+          })
+        }
+      })
+    }
+  },
+  watch: {
+    rooms: function () {
+      this.getRoomsData()
     }
   },
   mounted() {
     this.getUser()
+    this.getRoomsData()
   }
 }
 </script>

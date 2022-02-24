@@ -7,7 +7,7 @@
         type="text"
         placeholder="room name"
         ref="roomName"
-        class="shadow absolute appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
+        class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
       />
       <button
         type="submit"
@@ -18,12 +18,26 @@
         +
       </button>
     </form>
+
+    <div class="w-full bg-white rounded-lg shadow">
+      <ul class="divide-y-2 divide-gray-100">
+        <li
+          class="my-3 py-1 px-2 flex justify-between align-center"
+          v-for="room in rooms"
+          :key="room.name"
+        >
+          <span>created By: {{ room.name }}</span>
+          <span>{{ room.id }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Rooms',
+  props: ['rooms'],
   data() {
     return {
       roomName: null

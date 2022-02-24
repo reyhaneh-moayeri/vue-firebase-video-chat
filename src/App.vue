@@ -1,15 +1,20 @@
 <template>
   <div id="app">
     <Nav @signout="signOut" :user="user" />
-    <router-view :user="user" @signout="signOut" :rooms="rooms" @addRoom="addRoom" />
+    <router-view
+      :user="user"
+      @signout="signOut"
+      :rooms="rooms"
+      @addRoom="addRoom"
+      @deleteRoom="deleteRoom"
+    />
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav.vue'
 import db from './db.js'
-import Firebase from 'firebase/firestore'
-import { collection, doc, addDoc, getDocs } from 'firebase/firestore'
+import { collection, doc, addDoc, getDocs, deleteDoc } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: 'Home',
@@ -81,6 +86,10 @@ export default {
           })
         }
       })
+    },
+    async deleteRoom(payload) {
+      const userDoc = doc(collection(db, 'users'), this.user.uid)
+      await deleteDoc(doc(collection(userDoc, 'rooms'), payload))
     }
   },
   watch: {
@@ -94,8 +103,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-$primar: '#5f2882';
-@import './node_modules/bootstrap/scss/bootstrap';
-</style>

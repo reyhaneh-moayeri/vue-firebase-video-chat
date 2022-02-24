@@ -5,6 +5,12 @@
     </p>
     <h1>Start a video chat</h1>
     <img class="w-32 mt-3 mx-auto" src="http://pixelprowess.com/i/powship.svg" alt="POW Ship" />
+    <router-link
+      v-if="user"
+      to="/rooms"
+      class="bg-red-500 text-white hover:bg-red-700 font-bold rounded-md px-4 py-2"
+      >Rooms</router-link
+    >
   </div>
 </template>
 <script>

@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <Nav @signout="signOut" :user="user" />
-    <router-view :user="user" @signout="signOut" />
+    <router-view :user="user" @signout="signOut" @addRoom="addRoom" />
   </div>
 </template>
 
 <script>
 import Nav from './components/Nav.vue'
 import db from './db.js'
+import Firebase from 'firebase/firestore'
+import { collection, doc, addDoc } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: 'Home',
@@ -43,6 +45,13 @@ export default {
         .catch(error => {
           console.log('error signing out', error)
         })
+    },
+    async addRoom(payload) {
+      const t = doc(collection(db, 'users'), this.user.uid)
+      await addDoc(collection(t, 'rooms'), {
+        name: payload,
+        createdAt: new Date().toDateString()
+      })
     }
   },
   mounted() {

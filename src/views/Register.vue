@@ -53,7 +53,7 @@
         </div>
         <p class="text-center mt-2">
           or
-          <router-link to="/register">register</router-link>
+          <router-link to="/login">Log In</router-link>
         </p>
       </div>
     </form>

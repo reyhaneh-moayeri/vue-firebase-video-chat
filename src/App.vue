@@ -7,6 +7,7 @@
 
 <script>
 import Nav from './components/Nav.vue'
+import db from './db.js'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: 'Home',

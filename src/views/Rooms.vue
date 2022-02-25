@@ -39,7 +39,7 @@
             <router-link
               class="p-1 mx-1 px-2 rounded border-gray-600 border-1 border-gray-200 text-gray-600 hover:bg-gray-600 hover:text-white"
               title="Check In"
-              to="/"
+              :to="`/checkin/${user.uid}/${room.id}`"
             >
               <font-awesome-icon icon="user"></font-awesome-icon>
             </router-link>
@@ -62,7 +62,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 export default {
   name: 'Rooms',
-  props: ['rooms'],
+  props: ['rooms', 'user'],
   components: {
     FontAwesomeIcon
   },

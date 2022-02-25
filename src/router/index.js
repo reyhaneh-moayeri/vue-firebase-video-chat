@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Rooms from '../views/Rooms.vue'
-
+import CheckIn from '../views/CheckIn.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,6 +27,15 @@ const routes = [
     path: '/rooms',
     name: 'Rooms',
     component: Rooms
+  },
+  {
+    path: '/checkin/:hostId/:roomId',
+    name: 'CheckIn',
+    component: CheckIn
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
 ]
 

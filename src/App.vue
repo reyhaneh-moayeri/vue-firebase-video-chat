@@ -7,6 +7,7 @@
       :rooms="rooms"
       @addRoom="addRoom"
       @deleteRoom="deleteRoom"
+      @checkIn="checkIn"
     />
   </div>
 </template>
@@ -14,7 +15,7 @@
 <script>
 import Nav from './components/Nav.vue'
 import db from './db.js'
-import { collection, doc, addDoc, getDocs, deleteDoc } from 'firebase/firestore'
+import { collection, doc, addDoc, getDocs, deleteDoc, getDoc, setDoc } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
   name: 'Home',
@@ -90,6 +91,23 @@ export default {
     async deleteRoom(payload) {
       const userDoc = doc(collection(db, 'users'), this.user.uid)
       await deleteDoc(doc(collection(userDoc, 'rooms'), payload))
+    },
+
+    checkIn(payload) {
+      const userRef = collection(db, 'user')
+      const roomRef = collection(doc(userRef, payload.hostId), 'rooms')
+      const checkInRef = doc(roomRef, payload.roomId)
+      getDoc(checkInRef).then(attend => {
+        if (attend.exists) {
+          const attendesDoc = doc(collection(checkInRef, 'attendes'), this.user.uid)
+          setDoc(attendesDoc, {
+            displayName: payload.displayName,
+            createdAt: new Date().toDateString()
+          }).then(() => {
+            this.$router.push('/')
+          })
+        }
+      })
     }
   },
   watch: {
